@@ -1,5 +1,5 @@
 ﻿using MedGearMart.Models.DomainModel;
-using MedGearMart.ViewModels;
+using MedGearMart.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

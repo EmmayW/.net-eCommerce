@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MedGearMart.ViewModels
+namespace MedGearMart.Models.ViewModels
 {
     public class RegisterViewModel
     {
