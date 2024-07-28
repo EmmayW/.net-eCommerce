@@ -1,5 +1,6 @@
-using MedGearMart.Datas;
-using MedGearMart.Models;
+
+using MedGearMart.Models.DataLayer;
+using MedGearMart.Models.DomainModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,7 @@ builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString("MedGearMartDbContextCS");
 
-builder.Services.AddDbContext<AppUserDbContext>(
+builder.Services.AddDbContext<MedGearMartDbContext>(
     options => options.UseSqlServer(connectionString));
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(
@@ -23,7 +24,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireLowercase = false;
     })
-    .AddEntityFrameworkStores<AppUserDbContext>().AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<MedGearMartDbContext>().AddDefaultTokenProviders();
 
 
 

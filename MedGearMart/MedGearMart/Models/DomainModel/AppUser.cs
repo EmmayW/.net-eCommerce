@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace MedGearMart.Models
+namespace MedGearMart.Models.DomainModel
 {
-    public class AppUser: IdentityUser
+    public class AppUser : IdentityUser
     {
         [Required]
         public string? FirstName
