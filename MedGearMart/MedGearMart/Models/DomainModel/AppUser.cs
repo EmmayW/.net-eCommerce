@@ -18,5 +18,9 @@ namespace MedGearMart.Models.DomainModel
         }
 
         public string? Address { get; set; }
+
+        public ICollection<Order> Activities { get; set; } = new List<Order>();
+
+        public ICollection<Cart> carts { get; set; } = new List<Cart>();
     }
 }
