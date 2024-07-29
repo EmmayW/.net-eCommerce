@@ -11,5 +11,7 @@ namespace MedGearMart.Models.DomainModel
         public string CategoryName { get; set; }
 
         public string? CategoryDescription { get; set; }
+
+        public ICollection<Gear> Gears { get; set; } = new List<Gear>();
     }
 }

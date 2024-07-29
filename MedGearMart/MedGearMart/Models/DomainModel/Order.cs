@@ -20,7 +20,7 @@ namespace MedGearMart.Models.DomainModel
 
         public string OrderStatus { get; set; }
 
-        public ICollection<OrderItem> Activities { get; set; } = new List<OrderItem>();
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
 
 
