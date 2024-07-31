@@ -15,6 +15,9 @@ var connectionString = builder.Configuration.GetConnectionString("MedGearMartDbC
 builder.Services.AddDbContext<MedGearMartDbContext>(
     options => options.UseSqlServer(connectionString));
 
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+
 builder.Services.AddIdentity<AppUser, IdentityRole>(
     options =>
     {
@@ -46,6 +49,21 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+app.UseSession();
+
+/*
+// route for paging, sorting, and filtering
+app.MapControllerRoute(
+    name: "",
+    pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}/filter/{author}/{genre}/{price}");
+
+// route for paging and sorting only
+app.MapControllerRoute(
+    name: "",
+    pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}");
+*/
 
 app.MapControllerRoute(
     name: "default",

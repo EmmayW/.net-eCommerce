@@ -1,4 +1,5 @@
 ﻿using MedGearMart.Models.DomainModel;
+using MedGearMart.Models.Utils;
 using MedGearMart.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +10,16 @@ namespace MedGearMart.Controllers
     {
         private readonly SignInManager<AppUser> signInManager;
         private readonly UserManager<AppUser> userManager;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
+
+        
 
         // Constructor.
-        public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
+        public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+           // _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Login()
@@ -32,6 +37,9 @@ namespace MedGearMart.Controllers
                 
                 if (result.Succeeded)
                 {
+                    // Retrieve the user details from the database
+                    var loggedUser = await userManager.FindByNameAsync(model.Username);
+                    HttpContext.Session.SetObject("sessionUser", loggedUser);
                     ModelState.AddModelError("", "Success");
                     return Redirect("../Home/Index");
                 }

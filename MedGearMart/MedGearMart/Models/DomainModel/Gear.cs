@@ -16,7 +16,7 @@ namespace MedGearMart.Models.DomainModel
 
         public int Stock { get;set;}
 
-        public string imageUrl { get; set;}
+        public string ImageUrl { get; set;}
 
         [ForeignKey("CategoryId")]
         public int CategoryId { get; set; }
