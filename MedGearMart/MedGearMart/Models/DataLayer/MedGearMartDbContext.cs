@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using MedGearMart.Models.DomainModel;
 using System.Diagnostics;
+using MedGearMart.Models.DataLayer.SeedData;
 
 namespace MedGearMart.Models.DataLayer
 {
@@ -55,6 +56,10 @@ namespace MedGearMart.Models.DataLayer
 
 
             base.OnModelCreating(modelBuilder);
+
+            
+            CategorySeedData.Initialize(modelBuilder);
+            GearSeedData.Initialize(modelBuilder);
         }
 
 
