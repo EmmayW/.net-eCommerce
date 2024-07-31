@@ -21,7 +21,7 @@ namespace MedGearMart.Controllers
         }
 
         // GET: Gears
-        public async Task<IActionResult> Index(string? search, string? category)
+        public async Task<IActionResult> Index(string? search="", string? category="")
         {
             // Retrieve categories for the filter dropdown
             var categories = await _context.Categories
@@ -48,9 +48,8 @@ namespace MedGearMart.Controllers
             }
 
             // Retrieve the filtered list of products
-            var products = await query.ToListAsync();
-
-            return View(products);
+           
+            return View(await query.ToListAsync());
 
 
         }

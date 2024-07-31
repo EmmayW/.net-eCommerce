@@ -8,31 +8,39 @@
 
 <h1>Product List</h1>
 
+
 <!-- Search Form -->
 <form method="get" asp-action="Index">
-    <div class="form-row mb-4">
-        <div class="col-md-8">
+    <div class="row">
+        <div class="col-md-6 mb-2">
             <input type="text" name="search" class="form-control" placeholder="Search by product name" value="@search" />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-2">
             <select name="category" class="form-control">
-                <option value="">All Categories</option>
+                <option value="" selected="@(category=="")">All Categories</option>
                 @foreach (var categoryItem in ViewBag.Categories as List<SelectListItem>)
-                {
-                    <option value="@categoryItem.Value" >
+                { <option value="@categoryItem.Value" selected="@(categoryItem.Value == category)">
                         @categoryItem.Text
                     </option>
                 }
             </select>
         </div>
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-primary">Search</button>
+        <div class="col-md-1 mb-2">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+
+        </div>
+        <div class="col-md-1 mb-2">
+            <a role="button" class="btn btn-primary w-100" asp-action="Index" asp-controller="gears">Clear</a>
         </div>
     </div>
 </form>
 
+
+
+
+
 <!-- Product List -->
-<div class="row">
+<div class="row mt-4">
     @foreach (var item in Model)
     {
         <div class="col-md-4 mb-4">
@@ -43,7 +51,7 @@
                     <p class="card-text">@item.Description</p>
                     <p class="card-text"><strong>Price:</strong> @item.Price.ToString("C")</p>
                     <p class="card-text"><strong>Stock:</strong> @item.Stock</p>
-                    <p class="card-text"><strong>Category:</strong> @item.Category?.CategoryName ?? "Unknown"</p>
+                    <p class="card-text"><strong>Category:</strong> @item.Category?.CategoryName</p>
                     <form asp-action="AddToCart" asp-route-id="@item.GearId" asp-controller="Cart" method="post">
                         <button type="submit" class="btn btn-primary">Add To Cart</button>
                     </form>
