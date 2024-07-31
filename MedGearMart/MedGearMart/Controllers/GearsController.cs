@@ -55,9 +55,9 @@ namespace MedGearMart.Controllers
         }
 
         // GET: Gears/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null || _context.Gears == null)
+            if ( _context.Gears == null)
             {
                 return NotFound();
             }

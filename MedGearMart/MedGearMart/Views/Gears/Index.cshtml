@@ -47,7 +47,7 @@
             <div class="card">
                 <img src="~/imgs/@item.ImageUrl" class="card-img-top" alt="@item.GearName" style="max-height: 200px; object-fit: cover;" />
                 <div class="card-body">
-                    <h5 class="card-title">@item.GearName</h5>
+                    <h5 class="card-title"><a asp-action="Details" asp-route-id="@item.GearId">@item.GearName</a></h5>
                     <p class="card-text">@item.Description</p>
                     <p class="card-text"><strong>Price:</strong> @item.Price.ToString("C")</p>
                     <p class="card-text"><strong>Stock:</strong> @item.Stock</p>

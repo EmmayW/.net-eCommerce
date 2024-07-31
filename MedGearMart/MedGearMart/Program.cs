@@ -63,7 +63,10 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "",
     pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}");
-*/
+
+app.MapControllerRoute(
+    name: "",
+    pattern: "{controller}/{action}/{id}");*/
 
 app.MapControllerRoute(
     name: "default",

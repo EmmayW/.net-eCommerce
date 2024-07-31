@@ -1,54 +1,45 @@
 ﻿@model MedGearMart.Models.DomainModel.Gear
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Gear Details";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Column for Image -->
+        <div class="col-md-6 mb-3">
+            <img src="~/imgs/@Model.ImageUrl" class="img-fluid" alt="@Model.GearName">
+        </div>
 
-<div>
-    <h4>Gear</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GearName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GearName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.GearId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+        <!-- Right Column for Details -->
+        <div class="col-md-6">
+            <h2>@Model.GearName</h2>
+            <p class="lead">
+                @Model.Price.ToString("C")
+            </p>
+            <p>
+                <strong>Stock:</strong> @Model.Stock
+            </p>
+            <p>
+                <strong>Category:</strong> @Model.Category.CategoryName
+            </p>
+            <p>
+                <strong>Description:</strong>
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    @Model.Description
+                }
+                else
+                {
+                    <em>No description available</em>
+                }
+            </p>
+            <!-- Add to Cart Form -->
+            <form asp-action="AddToCart" method="post" asp-controller="Carts">
+                <input type="hidden" name="gearId" value="@Model.GearId" />
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
+            <a href="@Url.Action("Index", "Gears")" class="btn btn-primary">Back to List</a>
+        </div>
+    </div>
 </div>
