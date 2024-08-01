@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MedGearMart.Models.DataLayer;
 using MedGearMart.Models.Utils;
 using MedGearMart.Models.ViewModels;
@@ -11,8 +10,10 @@ namespace MedGearMart.Controllers
     public class CartsController : Controller
     {
         private readonly MedGearMartDbContext _context;
-        private const string CartKey = "mycart";
-        private const string CartCount = "mycount";
+        private
+        const string CartKey = "mycart";
+        private
+        const string CartCount = "mycount";
 
         public CartsController(MedGearMartDbContext context)
         {
@@ -26,12 +27,6 @@ namespace MedGearMart.Controllers
 
             return View(cart);
         }
-
-
-
-
-
-
 
         public async Task<IActionResult> AddToCart(int id)
         {
@@ -65,8 +60,7 @@ namespace MedGearMart.Controllers
                 });
             }
 
-            HttpContext.Session.SetObject(CartCount,  cart.Sum(item => item.Quantity));
-            
+            HttpContext.Session.SetObject(CartCount, cart.Sum(item => item.Quantity));
 
             // Save the cart to session
             HttpContext.Session.SetObject(CartKey, cart);
@@ -74,10 +68,6 @@ namespace MedGearMart.Controllers
             // Optionally, redirect to a cart page or show a confirmation
             return RedirectToAction("Index");
         }
-
-
-       
-
 
         [HttpPost]
         public IActionResult UpdateCart([FromBody] CartUpdateModel updateModel)
@@ -98,19 +88,17 @@ namespace MedGearMart.Controllers
                 }
             }
             HttpContext.Session.SetObject(CartCount, cart.Sum(item => item.Quantity));
-          
+
             // Save updated cart back to session
             HttpContext.Session.SetObject(CartKey, cart);
 
             return Ok();
         }
 
-       
-
         [HttpPost]
-        public IActionResult RemoveItem( int id)
+        public IActionResult RemoveItem(int id)
         {
-            
+
             var cart = HttpContext.Session.GetObject<List<CartViewModel>>(CartKey) ?? new List<CartViewModel>();
 
             var itemToRemove = cart.FirstOrDefault(c => c.Product.GearId == id);
@@ -119,7 +107,7 @@ namespace MedGearMart.Controllers
                 cart.Remove(itemToRemove);
             }
             HttpContext.Session.SetObject(CartCount, cart.Sum(item => item.Quantity));
-           
+
             // Save updated cart back to session
             HttpContext.Session.SetObject(CartKey, cart);
 
@@ -129,10 +117,16 @@ namespace MedGearMart.Controllers
 
     public class CartUpdateModel
     {
-        public int Id { get; set; }
-        public int Quantity { get; set; }
+        public int Id
+        {
+            get;
+            set;
+        }
+        public int Quantity
+        {
+            get;
+            set;
+        }
     }
-
-
 
 }

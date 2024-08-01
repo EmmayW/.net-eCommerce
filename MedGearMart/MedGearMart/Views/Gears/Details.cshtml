@@ -37,16 +37,22 @@
 
             <!-- Add to Cart Form and Back to List Button -->
             <div class="d-flex flex-column align-items-start">
-                <!-- Add to Cart Form -->
-                <form asp-action="AddToCart" method="post" asp-controller="Carts" class="mb-2">
-                    <input type="hidden" name="id" value="@Model.GearId" />
-                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                </form>
+                @if (Model.Stock > 0)
+                {
+                    <!-- Add to Cart Form -->
+                    <form asp-action="AddToCart" method="post" asp-controller="Carts" class="mb-2">
+                        <input type="hidden" name="id" value="@Model.GearId" />
+                        <button type="submit" class="btn btn-primary mb-2">Add to Cart</button>
+                    </form>
+                }
+                else
+                {
+                    <button class="btn btn-secondary mb-2" disabled>Out of Stock</button>
+                }
 
                 <!-- Back to List Button -->
-                <a href="@Url.Action("Index", "Gears")" class="btn btn-secondary" style="width: auto; max-width: 150px;">Back to List</a>
+                <a href="@Url.Action("Index", "Gears")" class="btn btn-secondary">Back to List</a>
             </div>
-
         </div>
     </div>
 </div>

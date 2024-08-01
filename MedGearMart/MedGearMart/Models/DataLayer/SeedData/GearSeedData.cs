@@ -14,7 +14,7 @@ namespace MedGearMart.Models.DataLayer.SeedData
                 new Gear { GearId = 3, GearName = "Thermometer", Description = "Infrared forehead thermometer.", Price = 20.00m, Stock = 50, ImageUrl = "thermometer.jpg", CategoryId = 1 },
 
                 // Diagnostics
-                new Gear { GearId = 4, GearName = "X-ray Machine", Description = "Digital X-ray imaging system.", Price = 5000.00m, Stock = 5, ImageUrl = "xray_machine.jpg", CategoryId = 2 },
+                new Gear { GearId = 4, GearName = "X-ray Machine", Description = "Digital X-ray imaging system.", Price = 5000.00m, Stock = 0, ImageUrl = "xray_machine.jpg", CategoryId = 2 },
                 new Gear { GearId = 5, GearName = "Ultrasound Device", Description = "Portable ultrasound scanner.", Price = 3000.00m, Stock = 8, ImageUrl = "ultrasound_device.jpg", CategoryId = 2 },
                 new Gear { GearId = 6, GearName = "Blood Test Kit", Description = "Comprehensive blood test kit.", Price = 100.00m, Stock = 100, ImageUrl = "blood_test_kit.jpg", CategoryId = 2 },
 
