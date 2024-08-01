@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using MedGearMart.Models.DataLayer;
 using MedGearMart.Models.DomainModel;
 using MedGearMart.Models.Utils;
+using MedGearMart.Models.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MedGearMart.Controllers
 {
@@ -21,38 +23,55 @@ namespace MedGearMart.Controllers
         }
 
         // GET: Gears
-        public async Task<IActionResult> Index(string? search="", string? category="")
+        public async Task<IActionResult> Index(string? category, string? search, string sortOrder="", int page = 1, int pageSize = 9)
         {
-            // Retrieve categories for the filter dropdown
-            var categories = await _context.Categories
-                .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.CategoryName })
-                .ToListAsync();
-            ViewBag.Categories = categories;
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
-            // Create the base query
-            IQueryable<Gear> query = _context.Gears.Include(g => g.Category);
+            var gears = from g in _context.Gears.Include(g => g.Category) select g;
 
-            // Apply search filter
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(g => g.GearName.Contains(search) );
+                gears = gears.Where(g => g.GearName.Contains(search));
             }
-
             // Apply category filter
             if (!string.IsNullOrEmpty(category))
             {
                 if (int.TryParse(category, out int categoryId))
                 {
-                    query = query.Where(g => g.CategoryId == categoryId);
+                    gears = gears.Where(g => g.Category.CategoryId == categoryId);
                 }
             }
-
-            // Retrieve the filtered list of products
            
-            return View(await query.ToListAsync());
+            
 
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    gears = gears.OrderByDescending(g => g.GearName);
+                    break;
+                case "Price":
+                    gears = gears.OrderBy(g => g.Price);
+                    break;
+                case "price_desc":
+                    gears = gears.OrderByDescending(g => g.Price);
+                    break;
+                default:
+                    gears = gears.OrderBy(g => g.GearName);
+                    break;
+            }
 
+            var paginatedList = await PaginatedList<Gear>.CreateAsync(gears.AsNoTracking(), page, pageSize);
+
+            //ViewBag.Categories = new SelectList(_context.Categories, "CategoryName", "CategoryName");
+            // Retrieve categories for the filter dropdown
+            var categories = await _context.Categories
+                .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.CategoryName })
+                .ToListAsync();
+            ViewBag.Categories = categories;
+            return View(paginatedList);
         }
+
 
         // GET: Gears/Details/5
         public async Task<IActionResult> Details(int id)
