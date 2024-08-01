@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using MedGearMart.Models.DataLayer;
 using MedGearMart.Models.Utils;
 using MedGearMart.Models.ViewModels;
-using System.Diagnostics.Metrics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedGearMart.Controllers
 {
+    [Authorize]
     public class CartsController : Controller
     {
         private readonly MedGearMartDbContext _context;
@@ -21,7 +22,6 @@ namespace MedGearMart.Controllers
         // GET: Carts
         public async Task<IActionResult> Index()
         {
-            //var cart =  ( HttpContext.Session.GetObject<CartViewModel>(CartKey))?? new List<CartViewModel>();
             var cart = HttpContext.Session.GetObject<List<CartViewModel>>(CartKey) ?? new List<CartViewModel>();
 
             return View(cart);
