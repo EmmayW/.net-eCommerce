@@ -14,7 +14,7 @@ namespace MedGearMart.Models.DataLayer
         {
         }
         public DbSet<Gear> Gears { get; set; }
-        public DbSet<Cart> Carts { get; set; }
+       
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
@@ -27,17 +27,7 @@ namespace MedGearMart.Models.DataLayer
            .HasForeignKey(t => t.CategoryId)
            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Cart>()
-             .HasOne(c => c.Product) // Cart has one Gear
-             .WithMany() // Gear does not need to know about multiple Carts
-             .HasForeignKey(c => c.ProductId)
-             .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Cart>()
-            .HasOne(c => c.User) 
-            .WithMany(a=>a.Carts) 
-            .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+         
 
             modelBuilder.Entity<OrderItem>()
            .HasOne(t => t.Order)

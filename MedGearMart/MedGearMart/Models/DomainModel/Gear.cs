@@ -11,7 +11,7 @@ namespace MedGearMart.Models.DomainModel
 
         public string GearName { get; set;}
         public string? Description { get; set;}
-
+        [DataType(DataType.Currency)]
         public decimal Price { get; set;}
 
         public int Stock { get;set;}

@@ -52,7 +52,7 @@
                     <p class="card-text"><strong>Price:</strong> @item.Price.ToString("C")</p>
                     <p class="card-text"><strong>Stock:</strong> @item.Stock</p>
                     <p class="card-text"><strong>Category:</strong> @item.Category?.CategoryName</p>
-                    <form asp-action="AddToCart" asp-route-id="@item.GearId" asp-controller="Cart" method="post">
+                    <form asp-action="AddToCart" asp-route-id="@item.GearId" asp-controller="Carts" method="post">
                         <button type="submit" class="btn btn-primary">Add To Cart</button>
                     </form>
                 </div>

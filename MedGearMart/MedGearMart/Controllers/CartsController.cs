@@ -9,12 +9,18 @@ using MedGearMart.Models.DataLayer;
 using MedGearMart.Models.DomainModel;
 using MedGearMart.Models.Utils;
 using Microsoft.CodeAnalysis;
+using Microsoft.AspNetCore.Http;
+using MedGearMart.Models.ViewModels;
+using Newtonsoft.Json.Linq;
+using static System.Collections.Specialized.BitVector32;
+using System.Diagnostics.Metrics;
 
 namespace MedGearMart.Controllers
 {
     public class CartsController : Controller
     {
         private readonly MedGearMartDbContext _context;
+        private const string CartKey = "mycart";
 
         public CartsController(MedGearMartDbContext context)
         {
@@ -24,159 +30,117 @@ namespace MedGearMart.Controllers
         // GET: Carts
         public async Task<IActionResult> Index()
         {
-            var medGearMartDbContext = _context.Carts.Include(c => c.Product).Include(c => c.User);
-            return View(await medGearMartDbContext.ToListAsync());
-        }
+            //var cart =  ( HttpContext.Session.GetObject<CartViewModel>(CartKey))?? new List<CartViewModel>();
+            var cart = HttpContext.Session.GetObject<List<CartViewModel>>(CartKey) ?? new List<CartViewModel>();
 
-
-
-        // POST: Carts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CartId,UserId,ProductId,Quantity")] Cart cart)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(cart);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProductId"] = new SelectList(_context.Gears, "GearId", "GearId", cart.ProductId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", cart.UserId);
             return View(cart);
         }
 
 
 
+
+
+
+
         public async Task<IActionResult> AddToCart(int id)
         {
-            // Retrieve the current user from the session
-            var sessionUser = HttpContext.Session.GetObject<AppUser>("sessionUser");
-            if (sessionUser == null)
+            // Retrieve the gear details for the selected product
+            var product = await _context.Gears.FindAsync(id);
+
+            if (product == null)
             {
-                return Unauthorized(); // Handle case where user is not logged in
+                // Product not found, return an error or redirect
+                return NotFound();
             }
 
-            // Create a unique session key to store the user's cart item
-            string sessionCartUserId = "userCart-" + sessionUser.Id;
+            // Retrieve the cart from session
+            var cart = HttpContext.Session.GetObject<List<CartViewModel>>(CartKey) ?? new List<CartViewModel>();
 
-            // Retrieve the cart item from the session
-            var sessionItemInCart = HttpContext.Session.GetObject<Cart>(sessionCartUserId);
+            // Find the item in the cart
+            var existingItem = cart.FirstOrDefault(item => item.Product.GearId == id);
 
-            // Check if the cart item exists in the database
-            var itemInCart = await _context.Carts
-                .FirstOrDefaultAsync(c => c.UserId == sessionUser.Id && c.ProductId == id);
-
-            if (itemInCart == null)
+            if (existingItem != null)
             {
-                // If the item is not in the database, create a new cart item
-                itemInCart = new Cart
-                {
-                    UserId = sessionUser.Id,
-                    ProductId = id,
-                    Quantity = 1
-                };
-                await _context.Carts.AddAsync(itemInCart);
+                // Item exists in the cart, increment the quantity
+                existingItem.Quantity += 1;
             }
             else
             {
-                // If the item exists, update the quantity
-                itemInCart.Quantity += 1;
-                _context.Carts.Update(itemInCart);
-            }
-
-            // Save the updated cart item to the session
-            HttpContext.Session.SetObject(sessionCartUserId, itemInCart);
-
-            // Save changes to the database asynchronously
-            await _context.SaveChangesAsync();
-
-            // Return the view or redirect as needed
-            return View(itemInCart);
-        }
-
-
-        public async Task<IActionResult> DeleteFromCart(int id)
-        {
-            // Retrieve the current user from the session
-            var sessionUser = HttpContext.Session.GetObject<AppUser>("sessionUser");
-            if (sessionUser == null)
-            {
-                return Unauthorized(); // Handle case where user is not logged in
-            }
-
-            // Create a unique session key to store the user's cart item
-            string sessionCartUserId = "userCart-" + sessionUser.Id;
-
-            // Retrieve the cart item from the database
-            var itemInCart = await _context.Carts
-                .FirstOrDefaultAsync(c => c.UserId == sessionUser.Id && c.ProductId == id);
-
-            if (itemInCart != null)
-            {
-                // If the item is found, remove it from the database
-                _context.Carts.Remove(itemInCart);
-                await _context.SaveChangesAsync(); // Save changes asynchronously
-
-                // Optionally, you can remove or update the session
-                HttpContext.Session.Remove(sessionCartUserId); // Remove the item from the session
-                                                               // If you have multiple items in the cart and want to keep others, 
-                                                               // update the session accordingly instead of removing it entirely.
-            }
-
-            // Redirect or return a response as needed
-            return RedirectToAction("Index"); // Or another appropriate action/view
-        }
-
-
-        public async Task<IActionResult> UpdateCart(int productId, int quantityChange)
-        {
-            // Retrieve the current user from the session
-            var sessionUser = HttpContext.Session.GetObject<AppUser>("sessionUser");
-            if (sessionUser == null)
-            {
-                return Unauthorized(); // Handle case where user is not logged in
-            }
-
-            // Find the cart item for the current user and product
-            var itemInCart = await _context.Carts
-                .FirstOrDefaultAsync(c => c.UserId == sessionUser.Id && c.ProductId == productId);
-
-            if (itemInCart != null)
-            {
-                // Update the quantity
-                itemInCart.Quantity += quantityChange;
-
-                // Ensure the quantity does not go below zero
-                if (itemInCart.Quantity <= 0)
+                // Item doesn't exist, add it with the specified quantity
+                cart.Add(new CartViewModel
                 {
-                    // Remove the item if quantity is zero or less
-                    _context.Carts.Remove(itemInCart);
-                }
-                else
-                {
-                    // Update the item in the database
-                    _context.Carts.Update(itemInCart);
-                }
-
-                // Save changes to the database asynchronously
-                await _context.SaveChangesAsync();
-
-                // Optionally, update the session
-                string sessionCartUserId = "userCart-" + sessionUser.Id;
-                HttpContext.Session.SetObject(sessionCartUserId, itemInCart);
+                    Product = product,
+                    Quantity = 1
+                });
             }
 
-            // Redirect or return a response as needed
-            return RedirectToAction("Index"); // Or another appropriate action/view
+
+
+
+            // Save the cart to session
+            HttpContext.Session.SetObject(CartKey, cart);
+
+            // Optionally, redirect to a cart page or show a confirmation
+            return RedirectToAction("Index");
         }
 
 
-        private bool CartExists(int id)
+       
+
+
+        [HttpPost]
+        public IActionResult UpdateCart([FromBody] CartUpdateModel updateModel)
         {
-            return (_context.Carts?.Any(e => e.CartId == id)).GetValueOrDefault();
+            int id = updateModel.Id;
+            int quantity = updateModel.Quantity;
+
+            var cart = HttpContext.Session.GetObject<List<CartViewModel>>(CartKey) ?? new List<CartViewModel>();
+
+            var existingItem = cart.FirstOrDefault(c => c.Product.GearId == id);
+            if (existingItem != null)
+            {
+                existingItem.Quantity = quantity;
+                // Ensure quantity is positive
+                if (existingItem.Quantity <= 0)
+                {
+                    cart.Remove(existingItem);
+                }
+            }
+           int? aa =  HttpContext.Session.GetInt32(CartKey);
+
+            // Save updated cart back to session
+            HttpContext.Session.SetObject(CartKey, cart);
+
+            return Ok();
+        }
+
+       
+
+        [HttpPost]
+        public IActionResult RemoveItem( int id)
+        {
+            
+            var cart = HttpContext.Session.GetObject<List<CartViewModel>>(CartKey) ?? new List<CartViewModel>();
+
+            var itemToRemove = cart.FirstOrDefault(c => c.Product.GearId == id);
+            if (itemToRemove != null)
+            {
+                cart.Remove(itemToRemove);
+            }
+
+            // Save updated cart back to session
+            HttpContext.Session.SetObject(CartKey, cart);
+
+            return Ok();
         }
     }
+
+    public class CartUpdateModel
+    {
+        public int Id { get; set; }
+        public int Quantity { get; set; }
+    }
+
+
+
 }

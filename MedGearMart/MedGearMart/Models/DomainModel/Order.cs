@@ -13,7 +13,7 @@ namespace MedGearMart.Models.DomainModel
         [ForeignKey("UserId")]
         public string UserId { get; set; }
         public AppUser User { get; set; }
-
+        [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
 
         public DateTime OrderTime { get; set; }
