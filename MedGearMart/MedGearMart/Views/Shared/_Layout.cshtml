@@ -1,8 +1,8 @@
 ﻿@using MedGearMart.Models.ViewModels;
 @{
     // get cart count from session
-  //  var cart = new CartViewModel(Context);
-   // var count = cart.Count;
+    var cart = new CartViewModel(Context);
+    var count = cart.Count();
     //<!--  <span class="badge badge-dark">@count</span>-->
    
 }
@@ -13,6 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MedGearMart</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha-long-hash_code" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MedGearMart.styles.css" asp-append-version="true" />
 </head>
@@ -40,9 +43,11 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item ">
                             <a class="nav-link" asp-action="Index" asp-controller="Carts" asp-area="">
-                                <span class="fas fa-shopping-cart"></span>&nbsp;Cart
-                                
+                                <span class="fas fa-shopping-cart">
+                                </span>&nbsp;Cart&nbsp;
+                                <span class="badge bg-primary">@count</span>
                             </a>
+                           
                         </li>
                         </ul>
                     <partial name="_LoginPartial"/>

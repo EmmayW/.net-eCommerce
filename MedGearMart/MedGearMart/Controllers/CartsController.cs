@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using MedGearMart.Models.DataLayer;
-using MedGearMart.Models.DomainModel;
 using MedGearMart.Models.Utils;
-using Microsoft.CodeAnalysis;
-using Microsoft.AspNetCore.Http;
 using MedGearMart.Models.ViewModels;
-using Newtonsoft.Json.Linq;
-using static System.Collections.Specialized.BitVector32;
 using System.Diagnostics.Metrics;
 
 namespace MedGearMart.Controllers
@@ -21,6 +11,7 @@ namespace MedGearMart.Controllers
     {
         private readonly MedGearMartDbContext _context;
         private const string CartKey = "mycart";
+        private const string CartCount = "mycount";
 
         public CartsController(MedGearMartDbContext context)
         {
@@ -74,8 +65,8 @@ namespace MedGearMart.Controllers
                 });
             }
 
-
-
+            HttpContext.Session.SetObject(CartCount,  cart.Sum(item => item.Quantity));
+            
 
             // Save the cart to session
             HttpContext.Session.SetObject(CartKey, cart);
@@ -106,8 +97,8 @@ namespace MedGearMart.Controllers
                     cart.Remove(existingItem);
                 }
             }
-           int? aa =  HttpContext.Session.GetInt32(CartKey);
-
+            HttpContext.Session.SetObject(CartCount, cart.Sum(item => item.Quantity));
+          
             // Save updated cart back to session
             HttpContext.Session.SetObject(CartKey, cart);
 
@@ -127,7 +118,8 @@ namespace MedGearMart.Controllers
             {
                 cart.Remove(itemToRemove);
             }
-
+            HttpContext.Session.SetObject(CartCount, cart.Sum(item => item.Quantity));
+           
             // Save updated cart back to session
             HttpContext.Session.SetObject(CartKey, cart);
 

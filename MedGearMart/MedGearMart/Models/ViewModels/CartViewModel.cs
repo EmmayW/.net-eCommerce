@@ -1,8 +1,7 @@
 ﻿
 
 using MedGearMart.Models.DomainModel;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Http;
+using MedGearMart.Models.Utils;
 
 namespace MedGearMart.Models.ViewModels
 {
@@ -10,33 +9,29 @@ namespace MedGearMart.Models.ViewModels
     {
 
 
-        private const string CartKey = "mycart";
+
         private const string CountKey = "mycount";
         public Gear Product { get; set; }
 
         public int Quantity { get; set; }
         private ISession session { get; set; }
-
-       
-            public CartViewModel(HttpContext httpContext)
-            {
-            session = httpContext.Session;
-            }
-
-
-        
-
-       /* public List<CartViewModel> GetCart()
+        public CartViewModel()
         {
-            var cart = session.Get<List<CartViewModel>>(CartKey) ?? new List<CartViewModel>();
-            return cart;
+
         }
 
-        public int GetCartCount()
+        public CartViewModel(HttpContext httpContext)
         {
-            var cart = GetCart();
-            return cart.Sum(item => item.Quantity);
-        }*/
+            session = httpContext.Session;
+        }
+
+        public int Count()
+        {
+
+            return session?.GetObject<int>(CountKey) ?? 0;
+        }
+
+
 
 
     }
