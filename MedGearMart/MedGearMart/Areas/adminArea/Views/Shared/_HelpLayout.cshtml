@@ -1,0 +1,33 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <nav>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")" asp-area="adminArea" asp-controller="Home" asp-action="Index">Overview</a>
+            </li>
+            @*<li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Tutorial" && ViewContext.RouteData.Values["id"].ToString() == "page1" ? "active" : "")" asp-area="adminArea" asp-controller="Tutorial" asp-action="Index" asp-route-id="page1">Tutorial</a>
+            </li>*@
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Orders" && ViewContext.RouteData.Values["action"].ToString() == "PendingOrders" ? "active" : "")" asp-area="adminArea" asp-controller="Home" asp-action="PendingOrders">Pending Orders</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "AddGear" ? "active" : "")" asp-area="adminArea" asp-controller="Home" asp-action="AddGear">Add Gear</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "UpdateStockList" ? "active" : "")" asp-area="adminArea" asp-controller="Home" asp-action="UpdateStockList">Update Stock</a>
+            </li>
+        </ul>
+    </nav>
+
+    <header>
+        @RenderSection("Header", required: true)
+    </header>
+
+    <div class="content">
+        @RenderBody()
+    </div>
+</div>

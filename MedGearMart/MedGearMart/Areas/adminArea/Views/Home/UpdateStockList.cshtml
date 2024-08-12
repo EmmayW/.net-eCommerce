@@ -1,0 +1,67 @@
+﻿@model MedGearMart.Models.ViewModels.UpdateStockListViewModel
+@{
+    ViewData["Title"] = "Pending orders";
+}
+
+@section Header {
+
+}
+<div class="container mt-4">
+    <h2>Update Product Stock</h2>
+
+    <form method="get" asp-action="UpdateStockList" class="form-inline" style="display:flex">
+        <div class="form-group mb-2" style="margin-right:5px;">
+            <input type="text" name="searchString" value="@Model.SearchString" class="form-control mr-5" placeholder="Search by product name" />
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Search</button>
+    </form>
+
+    @if (Model.Products.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Gear ID</th>
+                    <th>Gear Name</th>
+                    <th>Current Stock</th>
+                    <th>New Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var gear in Model.Products)
+                {
+                    <tr>
+                        <td>@gear.GearId</td>
+                        <td>@gear.GearName</td>
+                        <td>@gear.Stock</td>
+                        <form asp-action="UpdateStock" method="post" style="display: flex; align-items: center;">
+                        <td>
+                            <input type="hidden" name="gearId" value="@gear.GearId" />
+                            <input type="number" name="newStock" class="form-control" value="@gear.Stock" style="width: 80px; margin-right: 10px;" min="0" />
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </td>
+                        </form>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="UpdateStockList" asp-route-pageNumber="@i" asp-route-searchString="@Model.SearchString">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <p>No products found.</p>
+    }
+</div>

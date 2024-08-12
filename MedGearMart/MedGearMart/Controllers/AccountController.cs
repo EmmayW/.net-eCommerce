@@ -40,6 +40,10 @@ namespace MedGearMart.Controllers
                     // Retrieve the user details from the database
                     var loggedUser = await userManager.FindByNameAsync(model.Username);
                     HttpContext.Session.SetObject("sessionUser", loggedUser);
+                    
+                    var userId = loggedUser.Id;
+                    var username = loggedUser.UserName;
+
                     ModelState.AddModelError("", "Success");
                     return Redirect("../Home/Index");
                 }

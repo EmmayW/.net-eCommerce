@@ -1,11 +1,16 @@
 ﻿@using MedGearMart.Models.ViewModels;
+﻿@using Microsoft.AspNetCore.Identity
+@using MedGearMart.Models.DomainModel
+@inject SignInManager<AppUser> signInManager
+
 @{
     // get cart count from session
     var cart = new CartViewModel(Context);
     var count = cart.Count();
     //<!--  <span class="badge badge-dark">@count</span>-->
-   
 }
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,8 +42,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Gears" asp-action="Index">Products</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">About Us</a>
                         </li>
+                        @*<li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="adminArea" asp-controller="Home" asp-action="Index">Admin</a>
+                        </li>
+                        *@
+                        @if (@User.Identity!.Name == "admin@gmail.com")
+                        {
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="adminArea" asp-controller="Home" asp-action="Index">Admin</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item ">

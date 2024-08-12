@@ -57,7 +57,10 @@
 
             <div class="d-flex justify-content-between">
                 <a asp-controller="Gears" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
-                <a class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Check Out</a>
+                @*<a class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Check Out</a>*@
+                <a asp-controller="Carts" asp-action="Checkout" class="btn btn-primary">
+                    <i class="fa fa-check" aria-hidden="true"></i> Check Out
+                </a>
             </div>
         </form>
     }

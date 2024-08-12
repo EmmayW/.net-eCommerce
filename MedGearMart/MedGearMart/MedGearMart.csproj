@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\adminArea\Views\Orders\" />
     <Folder Include="Models\ServiceModel\" />
     <Folder Include="wwwroot\imgs\" />
   </ItemGroup>

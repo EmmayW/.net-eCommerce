@@ -113,6 +113,13 @@ namespace MedGearMart.Controllers
 
             return Ok();
         }
+
+        public IActionResult Checkout()
+        {
+            var cart = HttpContext.Session.GetObject<List<CartViewModel>>(CartKey) ?? new List<CartViewModel>();
+            return View("CheckoutPage", cart);
+        }
+
     }
 
     public class CartUpdateModel

@@ -1,0 +1,51 @@
+﻿@model MedGearMart.Models.ViewModels.GearViewModel
+
+@{
+    ViewData["Title"] = "Add new Gear";
+}
+
+@section Header {
+
+}
+
+<div class="container mt-4">
+    <h2>Add New Gear</h2>
+
+    <form asp-action="AddGear" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="GearName">Gear Name</label>
+            <input asp-for="GearName" class="form-control" required/>
+            <span asp-validation-for="GearName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" class="form-control" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" required />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Stock"></label>
+            <input asp-for="Stock" class="form-control" required  />
+            <span asp-validation-for="Stock" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CategoryId">Category</label>
+            <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "CategoryId", "CategoryName"))" required></select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="imageFile">Image</label>
+            <input type="file" name="imageFile" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Gear</button>
+    </form>
+</div>

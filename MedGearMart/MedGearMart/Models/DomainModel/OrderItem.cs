@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedGearMart.Models.DomainModel
 {
@@ -8,22 +8,19 @@ namespace MedGearMart.Models.DomainModel
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderItemId { get; set; }
-      
 
         public int ProductId { get; set; }
+
         [ForeignKey("ProductId")]
         public Gear Product { get; set; }
 
+        [Required]
         public int Quantity { get; set; }
-
-        public decimal Subtotal => Product.Price * Quantity;
 
         [ForeignKey("OrderId")]
         public int OrderId { get; set; }
+
         public Order Order { get; set; }
-
-        
-
 
     }
 }
