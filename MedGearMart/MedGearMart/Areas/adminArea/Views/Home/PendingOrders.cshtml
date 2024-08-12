@@ -20,6 +20,7 @@
                     <th>Order ID</th>
                     <th>Customer Name</th>
                     <th>Order Date</th>
+                    <th>Total Amount</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -31,6 +32,7 @@
                         <td>@order.OrderId</td>
                         <td>@order.FirstName @order.LastName</td>
                         <td>@order.OrderTime.ToString("MM/dd/yyyy")</td>
+                        <td>@order.OrderTotal</td>
                         <td>@order.OrderStatus</td>
                         <td>
                             <form asp-action="UpdateOrderStatus" method="post" style="display: inline-flex; align-items: center;">
