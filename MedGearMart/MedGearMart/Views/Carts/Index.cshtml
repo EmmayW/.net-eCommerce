@@ -28,9 +28,9 @@
                             <td>@item.Product.Price.ToString("C")</td>
                             <td>
                                 <div class="input-group">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(@item.Product.GearId, -1)">-</button>
-                                    <input type="number" id="quantity-@item.Product.GearId" name="items[@item.Product.GearId].Quantity" value="@item.Quantity" min="1" class="form-control text-center" disabled />
-                                    <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(@item.Product.GearId, 1)">+</button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(@item.Product.GearId, -1)" >-</button>
+                                    <input type="number" id="quantity-@item.Product.GearId" name="items[@item.Product.GearId].Quantity" value="@item.Quantity" min="1" class="form-control text-center" disabled max="@item.Product.Stock" />
+                                    <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(@item.Product.GearId, 1)" >+</button>
                                 </div>
                             </td>
                             
@@ -76,9 +76,12 @@
         function changeQuantity(productId, delta) {
             var quantityInput = $('#quantity-' + productId);
             var newQuantity = parseInt(quantityInput.val()) + delta;
-            if (newQuantity > 0) {
+            
+            if (newQuantity > 0 && newQuantity <= parseInt(quantityInput.attr("max") || 0)) {
                 quantityInput.val(newQuantity);
                 updateCart(productId, newQuantity);
+            } else {
+                alert("Incorrect Product Qunantity!")
             }
         }
 
